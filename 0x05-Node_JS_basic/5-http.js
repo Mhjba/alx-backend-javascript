@@ -2,7 +2,14 @@ const http = require('http');
 const countStudents = require('./3-read_file_async');
 
 const PORT = 1245;
+const HOST = 'localhost';
+const app = http.createServer();
 const DB_PATH = process.argv.length > 2 ? process.argv[2] : '';
+
+/**
+ * Counts the students in a CSV data file.
+ * @param {String} dataPath The path to the CSV data file.
+ */
 
 const app = http.createServer((req, res) => {
   if (req.url === '/') {
