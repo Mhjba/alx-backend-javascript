@@ -17,9 +17,9 @@ const SERVER_ROUTE_HANDLERS = [
     handler(_, res) {
       const responseText = 'Hello Holberton School!';
       res.setHeader('Content-Type', 'text/plain');
-      res.setHeader('Content-Length', responseText.length);
+      res.setHeader('Content-Length', Buffer.byteLength(responseText));
       res.statusCode = 200;
-      res.write(Buffer.from(responseText));
+      res.end(responseText);
     },
   },
   {
@@ -28,37 +28,37 @@ const SERVER_ROUTE_HANDLERS = [
       const responseParts = ['This is the list of our students'];
 
       countStudents(DB_PATH)
-        .then((report) => {
-          responseParts.push(report);
+        .then(() => {
           const responseText = responseParts.join('\n');
           res.setHeader('Content-Type', 'text/plain');
-          res.setHeader('Content-Length', responseText.length);
+          res.setHeader('Content-Length', Buffer.byteLength(responseText));
           res.statusCode = 200;
-          res.write(Buffer.from(responseText));
+          res.end(responseText);
         })
         .catch((err) => {
           responseParts.push(err instanceof Error ? err.message : err.toString());
           const responseText = responseParts.join('\n');
           res.setHeader('Content-Type', 'text/plain');
-          res.setHeader('Content-Length', responseText.length);
-          res.statusCode = 200;
-          res.write(Buffer.from(responseText));
+          res.setHeader('Content-Length', Buffer.byteLength(responseText));
+          res.statusCode = 500;
+          res.end(responseText);
         });
     },
   },
 ];
 
 app.on('request', (req, res) => {
-  for (const routeHandler of SERVER_ROUTE_HANDLERS) {
-    if (routeHandler.route === req.url) {
-      routeHandler.handler(req, res);
-      break;
-    }
+  const routeHandler = SERVER_ROUTE_HANDLERS.find(handler => handler.route === req.url);
+  if (routeHandler) {
+    routeHandler.handler(req, res);
+  } else {
+    res.statusCode = 404;
+    res.end('Not Found');
   }
 });
 
 app.listen(PORT, HOST, () => {
-  process.stdout.write(`Server listening at -> http://${HOST}:${PORT}\n`);
+  console.log(`Server listening at -> http://${HOST}:${PORT}`);
 });
 
 module.exports = app;
