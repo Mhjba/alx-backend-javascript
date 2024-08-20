@@ -1,29 +1,27 @@
-const http = require('http');
+const express = require('express');
 const countStudents = require('./3-read_file_async');
 
+const app = express();
 const PORT = 1245;
 const DB_PATH = process.argv.length > 2 ? process.argv[2] : '';
 
-const app = http.createServer((req, res) => {
-  if (req.url === '/') {
-    const responseText = 'Hello Holberton School!';
-    res.setHeader(200, { 'Content-Type': 'text/plain' });
-    res.end(responseText);
-  } else if (req.url === '/students') {
-    res.setHeader(200, { 'Content-Type': 'text/plain' });
-    res.write('This is the list of our students\n');
+app.get('/', (req, res) => {
+  res.send('Hello Holberton School!');
+});
 
-    countStudents(DB_PATH)
-      .then((report) => {
-        res.end(report);
-      })
-      .catch((err) => {
-        res.end(err.message);
-      });
-  } else {
-    res.setHeader(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
-  }
+app.get('/students', (req, res) => {
+  countStudents(DB_PATH)
+    .then((report) => {
+      const responseText = `This is the list of our students\n${report}`;
+      res.set('Content-Type', 'text/plain');
+      res.send(responseText);
+    })
+    .catch((err) => {
+      const errorMessage = err instanceof Error ? err.message : err.toString();
+      const responseText = `This is the list of our students\n${errorMessage}`;
+      res.set('Content-Type', 'text/plain');
+      res.send(responseText);
+    });
 });
 
 app.listen(PORT, () => {
