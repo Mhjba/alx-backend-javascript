@@ -16,5 +16,8 @@
     "nodejs"
   ],
   "author": "javascript, testing, backend",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.1"
+  }
 }
