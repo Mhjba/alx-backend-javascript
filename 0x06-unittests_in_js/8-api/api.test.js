@@ -1,22 +1,14 @@
-const request = require("request");
-const {describe, it} = require("mocha");
-const expect = require("chai").expect;
+const request = require('request');
+const { expect } = require('chai');
 
-describe("Index page", function() {
-    const options = {
-	url: "http://localhost:7865/",
-	method: "GET"
-    }
-    it("check correct status code", function(done) {
-	request(options, function(err, res, body) {
-	    expect(res.statusCode).to.equal(200);
-	    done();
-	});
+describe('API integration test', () => {
+  const API_URL = 'http://localhost:7865';
+
+  it('GET / returns correct response', (done) => {
+    request.get(`${API_URL}/`, (_err, res, body) => {
+      expect(res.statusCode).to.be.equal(200);
+      expect(body).to.be.equal('Welcome to the payment system');
+      done();
     });
-    it("check correct content", function(done) {
-	request(options, function(err, res, body) {
-	    expect(body).to.contain("Welcome to the payment system");
-	    done();
-	});
-    });
+  });
 });
