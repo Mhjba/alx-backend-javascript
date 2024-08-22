@@ -1,0 +1,23 @@
+{
+  "name": "unittests_in_js",
+  "version": "1.0.0",
+  "description": "A project for learning the basics of unittests in Node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mhjba/alx-backend-javascript/blob/master/0x06-unittests_in_js/README.md"
+  },
+  "keywords": [
+    "unittest",
+    "mocha",
+    "nodejs"
+  ],
+  "author": "javascript, testing, backend",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^5.1.1"
+  }
+}
